@@ -51,19 +51,21 @@ class PropertyListSerializer(serializers.ModelSerializer):
             'property_type',
             'listing_type',
             'status',
-            'price',
+            'sell_price',
+            'rent_price',
             'currency',
-            'area',
+            'total_area',
             'bedrooms',
             'bathrooms',
             'construction_year',
             'city',
             'country',
             'main_image',
+            'is_premium',
             'is_featured',
             'owner_name',
             'images_count',
-            'created_at',
+            'date_created',
         )
 
 
@@ -83,36 +85,63 @@ class PropertyDetailSerializer(serializers.ModelSerializer):
             'owner_phone',
             'title',
             'description',
+            'have_documentation',
+            'doc_file',
+            'video_url',
             'property_type',
             'listing_type',
             'status',
-            'price',
+            'sell_price',
+            'rent_price',
             'currency',
-            'area',
-            'bedrooms',
-            'bathrooms',
-            'floor',
-            'total_floors',
-            'construction_year',
-            'address',
+            'total_area',
+            'location',
             'city',
             'country',
             'latitude',
             'longitude',
             'main_image',
             'images',
+            'is_premium',
             'is_featured',
-            'is_active',
-            'views_count',
-            'created_at',
-            'updated_at',
+            'is_published',
+            'date_created',
+            'date_updated',
+            # apartment
+            'total_living_area',
+            'bedrooms',
+            'bathrooms',
+            'floor',
+            'balcony',
+            'view',
+            'elevator',
+            'furnishing_status',
+            'heating_colling_system',
+            'parking_spots',
+            'orientation',
+            'total_floors',
+            'construction_year',
+            'management_fee',
+            # villa
+            'land_size',
+            'number_of_floors',
+            'basement',
+            'swimming_pool',
+            'security_system',
+            'outdoor_extras',
+            # land
+            'zoning_type',
+            'road_frontage',
+            'terrain_topography',
+            'max_allowed_floors',
+            'road_access',
+            'utilities',
         )
         read_only_fields = (
             'id',
             'owner',
-            'views_count',
-            'created_at',
-            'updated_at',
+            'date_created',
+            'date_updated',
         )
 
 
@@ -122,33 +151,67 @@ class PropertyCreateUpdateSerializer(serializers.ModelSerializer):
         fields = (
             'title',
             'description',
+            'have_documentation',
+            'doc_file',
+            'video_url',
             'property_type',
             'listing_type',
             'status',
-            'price',
+            'sell_price',
+            'rent_price',
             'currency',
-            'area',
-            'bedrooms',
-            'bathrooms',
-            'floor',
-            'total_floors',
-            'construction_year',
-            'address',
+            'total_area',
+            'location',
             'city',
             'country',
             'latitude',
             'longitude',
             'main_image',
+            'is_premium',
             'is_featured',
-            'is_active',
+            'is_published',
+            # apartment
+            'total_living_area',
+            'bedrooms',
+            'bathrooms',
+            'floor',
+            'balcony',
+            'view',
+            'elevator',
+            'furnishing_status',
+            'heating_colling_system',
+            'parking_spots',
+            'orientation',
+            'total_floors',
+            'construction_year',
+            'management_fee',
+            # villa
+            'land_size',
+            'number_of_floors',
+            'basement',
+            'swimming_pool',
+            'security_system',
+            'outdoor_extras',
+            # land
+            'zoning_type',
+            'road_frontage',
+            'terrain_topography',
+            'max_allowed_floors',
+            'road_access',
+            'utilities',
         )
 
-    def validate_price(self, value):
-        if value <= 0:
-            raise serializers.ValidationError('Price must be greater than zero.')
+    def validate_sell_price(self, value):
+        if value is not None and value <= 0:
+            raise serializers.ValidationError('Sell price must be greater than zero.')
         return value
 
-    def validate_area(self, value):
-        if value <= 0:
-            raise serializers.ValidationError('Area must be greater than zero.')
+    def validate_rent_price(self, value):
+        if value is not None and value <= 0:
+            raise serializers.ValidationError('Rent price must be greater than zero.')
+        return value
+
+    def validate_total_area(self, value):
+        if value is not None and value <= 0:
+            raise serializers.ValidationError('Total area must be greater than zero.')
         return value

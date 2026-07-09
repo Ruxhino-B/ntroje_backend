@@ -40,14 +40,16 @@ class PropertyAdmin(admin.ModelAdmin):
         'property_type',
         'listing_type',
         'status',
-        'price',
+        'sell_price',
+        'rent_price',
         'currency',
         'city',
         'construction_year',
         'owner',
+        'is_premium',
         'is_featured',
-        'is_active',
-        'created_at',
+        'is_published',
+        'date_created',
         'main_image_preview',
     )
     list_filter = (
@@ -56,20 +58,21 @@ class PropertyAdmin(admin.ModelAdmin):
         'status',
         'city',
         'construction_year',
+        'is_premium',
         'is_featured',
-        'is_active',
-        'created_at',
+        'is_published',
+        'date_created',
     )
     search_fields = (
         'title',
         'description',
-        'address',
+        'location',
         'city',
         'owner__email',
         'owner__username',
     )
-    ordering = ('-created_at',)
-    readonly_fields = ('views_count', 'created_at', 'updated_at', 'main_image_preview')
+    ordering = ('-is_premium', '-date_updated')
+    readonly_fields = ('date_created', 'date_updated', 'main_image_preview')
 
     fieldsets = (
         ('Owner', {
@@ -79,6 +82,9 @@ class PropertyAdmin(admin.ModelAdmin):
             'fields': (
                 'title',
                 'description',
+                'have_documentation',
+                'doc_file',
+                'video_url',
                 'property_type',
                 'listing_type',
                 'status',
@@ -86,19 +92,16 @@ class PropertyAdmin(admin.ModelAdmin):
         }),
         ('Price & dimensions', {
             'fields': (
-                'price',
+                'sell_price',
+                'rent_price',
                 'currency',
-                'area',
-                'bedrooms',
-                'bathrooms',
-                'floor',
-                'total_floors',
+                'total_area',
                 'construction_year',
             )
         }),
         ('Location', {
             'fields': (
-                'address',
+                'location',
                 'city',
                 'country',
                 'latitude',
@@ -111,17 +114,57 @@ class PropertyAdmin(admin.ModelAdmin):
                 'main_image_preview',
             )
         }),
+        ('Apartment details', {
+            'fields': (
+                'total_living_area',
+                'bedrooms',
+                'bathrooms',
+                'floor',
+                'balcony',
+                'view',
+                'elevator',
+                'furnishing_status',
+                'heating_colling_system',
+                'parking_spots',
+                'orientation',
+                'total_floors',
+                'management_fee',
+            ),
+            'classes': ('collapse',),
+        }),
+        ('Villa details', {
+            'fields': (
+                'land_size',
+                'number_of_floors',
+                'basement',
+                'swimming_pool',
+                'security_system',
+                'outdoor_extras',
+            ),
+            'classes': ('collapse',),
+        }),
+        ('Land details', {
+            'fields': (
+                'zoning_type',
+                'road_frontage',
+                'terrain_topography',
+                'max_allowed_floors',
+                'road_access',
+                'utilities',
+            ),
+            'classes': ('collapse',),
+        }),
         ('Settings', {
             'fields': (
+                'is_premium',
                 'is_featured',
-                'is_active',
-                'views_count',
+                'is_published',
             )
         }),
         ('Timestamps', {
             'fields': (
-                'created_at',
-                'updated_at',
+                'date_created',
+                'date_updated',
             )
         }),
     )

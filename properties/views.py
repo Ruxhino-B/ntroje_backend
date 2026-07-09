@@ -18,12 +18,12 @@ class PropertyListCreateView(generics.ListCreateAPIView):
     GET  /api/properties/
     POST /api/properties/
     """
-    queryset = Property.objects.select_related('owner').prefetch_related('images').filter(is_active=True)
+    queryset = Property.objects.select_related('owner').prefetch_related('images').filter(is_published=True)
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'description', 'address', 'city', 'country']
-    ordering_fields = ['price', 'area', 'created_at', 'views_count']
-    ordering = ['-created_at']
+    search_fields = ['title', 'description', 'location', 'city', 'country']
+    ordering_fields = ['sell_price', 'rent_price', 'total_area', 'date_created']
+    ordering = ['-date_created']
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -41,19 +41,13 @@ class PropertyDetailView(generics.RetrieveUpdateDestroyAPIView):
     PATCH  /api/properties/<id>/
     DELETE /api/properties/<id>/
     """
-    queryset = Property.objects.select_related('owner').prefetch_related('images').filter(is_active=True)
+    queryset = Property.objects.select_related('owner').prefetch_related('images').filter(is_published=True)
     permission_classes = [IsAuthenticatedOrReadOnly, IsPropertyOwnerOrReadOnly]
 
     def get_serializer_class(self):
         if self.request.method in ('PUT', 'PATCH'):
             return PropertyCreateUpdateSerializer
         return PropertyDetailSerializer
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.views_count += 1
-        instance.save(update_fields=['views_count'])
-        return super().retrieve(request, *args, **kwargs)
 
 
 class PropertyImageUploadView(generics.GenericAPIView):
@@ -68,7 +62,7 @@ class PropertyImageUploadView(generics.GenericAPIView):
         property_obj = generics.get_object_or_404(
             Property.objects.prefetch_related('images'),
             pk=self.kwargs['property_id'],
-            is_active=True
+            is_published=True
         )
         self.check_object_permissions(self.request, property_obj)
         return property_obj
