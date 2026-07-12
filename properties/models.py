@@ -7,6 +7,8 @@ from django.core.files.base import ContentFile
 from django.db import models
 from PIL import Image
 
+from agency.models import Agency
+
 PROPERTY_TYPE_APARTMENT = 'apartment'
 PROPERTY_TYPE_HOUSE = 'house'
 PROPERTY_TYPE_VILLA = 'villa'
@@ -88,7 +90,7 @@ class Property(models.Model):
         on_delete=models.CASCADE,
         related_name='properties'
     )
-
+    agency = models.ForeignKey(Agency, on_delete=models.SET_NULL, related_name='properties', blank=True, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     have_documentation = models.BooleanField(default=False)

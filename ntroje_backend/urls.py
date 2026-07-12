@@ -10,6 +10,8 @@ urlpatterns = [
     # Auth
     path('api/auth/', include('accounts.urls')),
 
+    # Agency
+    path('api/agency/', include('agency.urls')),
     # Properties
     path('api/properties/', include('properties.urls')),
 ]

@@ -3,6 +3,8 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+
+
 User = get_user_model()
 
 
@@ -34,17 +36,27 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
-
 class UserMeSerializer(serializers.ModelSerializer):
     """Lightweight serializer — used inside JWT response and /auth/me/."""
     full_name = serializers.CharField(read_only=True)
     avatar = serializers.ImageField(read_only=True)
+    agency = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'first_name', 'last_name', 'full_name',
-                  'phone', 'role', 'avatar', 'date_joined')
+                  'phone', 'role', 'avatar', 'date_joined', 'agency')
         read_only_fields = ('id', 'email', 'role', 'date_joined')
+
+    def get_agency(self, obj):
+        from agency.serializers import AgencyMiniSerializer
+        agency = getattr(obj, 'owned_agency', None)
+
+        if not agency:
+            membership = obj.agency_memberships.filter(is_active=True).select_related('agency').first()
+            agency = membership.agency if membership else None
+
+        return AgencyMiniSerializer(agency).data if agency else None
 
 
 class UpdateProfileSerializer(serializers.ModelSerializer):
