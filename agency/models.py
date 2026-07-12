@@ -36,6 +36,7 @@ class Agency(models.Model):
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    views_count = models.PositiveIntegerField(default=0)
 
     class Meta:
         db_table = 'agencies'

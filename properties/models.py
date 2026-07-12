@@ -84,6 +84,11 @@ def property_image_upload_path(instance, filename):
     return f'properties/{filename}'
 
 
+# dua te nxjerr disa statistika.
+# eshte me mire te krijoj nje app te ri?
+# dua te gjitha statistikat qe i duhet nje real estate ne dashboard page.
+# po ashtu ne "My poperties" me duhen statistikat si publishedCount, draftCount, pandingCount, totalView
+
 class Property(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -116,6 +121,7 @@ class Property(models.Model):
     is_published = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    views_count = models.PositiveIntegerField(default=0)
 
     # apartment
     total_living_area = models.DecimalField( max_digits=10, decimal_places=2, null=True, blank=True)
