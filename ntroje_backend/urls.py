@@ -14,6 +14,7 @@ urlpatterns = [
     path('api/agency/', include('agency.urls')),
     # Properties
     path('api/properties/', include('properties.urls')),
+    path('api/trackviews/', include('trackview.urls'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
