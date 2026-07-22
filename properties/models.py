@@ -106,8 +106,8 @@ class Property(models.Model):
     listing_type = models.CharField( max_length=20, choices=LISTING_TYPE_CHOICES, default=LISTING_TYPE_RENT)
     status = models.CharField( max_length=20, choices=PROPERTY_STATUS_CHOICES, default=PROPERTY_STATUS_DRAFT)
 
-    sell_price = models.DecimalField(max_digits=12, decimal_places=2)
-    rent_price = models.DecimalField(max_digits=12, decimal_places=2)
+    sell_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    rent_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     currency = models.CharField(max_length=10, default='EUR')
     total_area = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)

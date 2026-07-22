@@ -201,15 +201,7 @@ class PropertyCreateUpdateSerializer(serializers.ModelSerializer):
             'utilities',
         )
 
-    def validate_sell_price(self, value):
-        if value is not None and value <= 0:
-            raise serializers.ValidationError('Sell price must be greater than zero.')
-        return value
 
-    def validate_rent_price(self, value):
-        if value is not None and value <= 0:
-            raise serializers.ValidationError('Rent price must be greater than zero.')
-        return value
 
     def validate_total_area(self, value):
         if value is not None and value <= 0:
